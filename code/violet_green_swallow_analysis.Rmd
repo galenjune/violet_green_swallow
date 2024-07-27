@@ -1,0 +1,266 @@
+---
+title: "violet_green_swallow_analysis"
+output: html_document
+date: "2024-07-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# install our packages
+
+install.packages("tidyverse")
+install.packages("vegan")
+install.packages("ggplot2")
+install.packages("ggpubr")
+install.packages("reshape2")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("stats")
+install.packages("devtools")
+devtools::install_github("ebbertd/chisq.posthoc.test")
+
+```
+
+```{r}
+# load our packages
+
+library(tidyverse)
+library(vegan)      # For diversity analysis
+library(ggplot2)    # For basic plotting
+library(tidyr)      # For data manipulation
+library(dplyr)      # For data manipulation
+library(ggpubr)     # For arranging multiple plots
+library(reshape2)   # For reshaping data
+library(stats)      # For running basic statistical tests
+library(chisq.posthoc.test) # for checking what made our stats tests significant
+
+```
+
+
+# set/see our working directory
+
+```{r}
+setwd("~/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files")
+
+getwd()
+```
+
+
+# we're using a chi-squared goodness of fit test to analyze the significance of certain variables on the total time the violet green swallow allofeeders are in/out of their nests
+
+```{r}
+# Generate example data (presence/absence matrix for trials)
+set.seed(123)
+```
+
+```{r}
+# open the data as a CSV
+vg_swallow <- read.csv("/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/Data Frame/violet_green_swallow_data_final.csv", header = TRUE)
+```
+
+```{r}
+# Chi squared tests have count and factor data. the factors will be compared against the count data to test to see if any of those factors are significant.
+
+# This section tells R which columns in our data frame(df) we want to be "factors" in our chi squared test. total time in/ out will be our count data
+
+# we want to compare the total time the violet-green swallow was in/out of their nests against which site, time of day (split into quadrants), temperature (F), cloud cover, wind speed, and tidal height
+
+View(vg_swallow)
+
+vg_swallow$site = as.factor(vg_swallow$site)
+vg_swallow$time_quad = as.factor(vg_swallow$time_quadrant)
+vg_swallow$temp = as.factor(vg_swallow$temperature_f)
+vg_swallow$cloud_cover = as.factor(vg_swallow$cloud_cover)
+vg_swallow$wind_speed = as.factor(vg_swallow$wind_speed)
+vg_swallow$tide = as.factor(vg_swallow$tide)
+```
+
+##################################################################
+
+# Doing the chi-squared tests for all of our "factors"
+
+```{r}
+
+# comparing time in/out data by "site"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ site, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out for all our sites
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site.csv", row.names = TRUE)
+
+#Removes the column "site" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(site) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_site_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+
+write.csv(vg_swallow_site_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site_posthoc.csv", row.names = TRUE)
+
+```
+
+##################################################################
+
+```{r}
+
+# comparing time in/out data by "time quadrant"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ time_quadrant, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out for all our time quadrants
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_time_quadrant.csv", row.names = TRUE)
+
+#Removes the column "time_quadrant" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(time_quadrant) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_time_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+write.csv(vg_swallow_time_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_timequadrant_posthoc.csv", row.names = TRUE)
+```
+
+##################################################################
+
+```{r}
+
+# comparing time in/out data by "temperature"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ temperature_f, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out in different temperatures
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f.csv", row.names = TRUE)
+
+#Removes the column "site" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(temperature_f) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_temp_posthoc = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+write.csv(vg_swallow_temp_posthoc,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f_posthoc.csv", row.names = TRUE)
+```
+
+##################################################################
+
+```{r}
+
+# comparing time in/out data by "cloud cover"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ cloud_cover, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out for all our different types of cloud cover
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover.csv", row.names = TRUE)
+
+#Removes the column "site" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(cloud_cover) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_cloud_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+write.csv(vg_swallow_cloud_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover_posthoc.csv", row.names = TRUE)
+```
+
+##################################################################
+
+```{r}
+
+# comparing time in/out data by "wind speed"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ wind_speed, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out in different wind speeds
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed.csv", row.names = TRUE)
+
+#Removes the column "site" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(wind_speed) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_wind_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+write.csv(vg_swallow_wind_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed_posthoc.csv", row.names = TRUE)
+```
+
+##################################################################
+
+```{r}
+
+# comparing time in/out data by "tide"
+vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
+) ~ tide, vg_swallow, sum)
+
+# making a .csv file that shows the results of us comparing total time in/out in different wind speeds
+
+write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide.csv", row.names = TRUE)
+
+#Removes the column "site" but treats each row as it's own entity
+df = subset(vg_swallow_chi, select = -c(tide) )
+
+#Turn that dataframe into a matrix for the function to work
+vg_swallow_chi = as.matrix(df)
+
+# Perform chi-squared test
+chi_squared_result <- chisq.test(vg_swallow_chi)
+
+# Print the result
+print(chi_squared_result)
+
+#Post-hoc test to find out what is significantly different between the combinations
+vg_swallow_tide_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
+
+write.csv(vg_swallow_tide_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide_posthoc.csv", row.names = TRUE)
+```
+
+##################################################################
