@@ -1,0 +1,139 @@
+---
+title: "vg_swallow_analysis"
+output: html_document
+date: "2024-07-24"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE)
+```
+
+```{r}
+devtools::install_github("thomasp85/patchwork")
+
+library(patchwork) # to combine two charts
+library(tidyverse)
+library(vegan)      # For diversity analysis
+library(ggplot2)    # For basic plotting
+library(tidyr)      # For data manipulation
+library(dplyr)      # For data manipulation
+library(ggpubr)     # For arranging multiple plots
+library(reshape2)   # For reshaping data
+```
+
+```{r}
+setwd("~/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files")
+
+getwd()
+```
+
+```{r}
+vg_swallow <- read.csv("/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/Data Frame/violet_green_swallow_data_final.csv", header = TRUE)
+```
+
+```{r}
+view(vg_swallow)
+
+vg_swallow %>% head()
+```
+
+# chart that shows the total in/out minutes for each site
+
+```{r}
+# make a data frame that shows the total time in/out of the nest at each site
+
+vg_swallow_site_chart = aggregate(cbind(total_time_out_nest, total_time_in_nest) ~ site, vg_swallow, sum)
+
+View(vg_swallow_site_chart)
+
+```
+
+```{r}
+# make a bar graph that shows the total time in/out of the nest at each site
+
+# using patchwork package to combine to two different charts
+
+# use fill to add color
+
+# used concencate to make colors for specific bars of the bar graph
+
+# use labs function to label the axis
+
+library(tidyverse)
+library(ggplot2)
+library(patchwork)
+
+p1 <- vg_swallow_site_chart %>% ggplot(aes(x = site, y = total_time_in_nest)) + geom_col(fill = c("#ec9006", "#1e2f97", "#797ef6")) + labs(x = "Nest Sites", y = "Time (Seconds)")
+
+p2 <- vg_swallow_site_chart %>% ggplot(aes(x = site, y = total_time_out_nest)) + geom_col(fill = c("#ec9006", "#1e2f97", "#797ef6")) + labs(x = "Nest Sites", y = "Time (Seconds)")
+
+p1 + p2
+
+```
+
+```{r}
+# code for both plots just by themselves
+
+library(tidyverse)
+library(ggplot2)
+
+vg_swallow_site_chart %>% ggplot(aes(x = site, y = total_time_in_nest)) + geom_col(fill = c("#ec9006", "#1e2f97", "#797ef6")) + labs(x = "Nest Sites", y = "Time (Seconds)", title = "Total Time In Nest by Site") +
+  theme(plot.title.position = 'plot', 
+      plot.title = element_text(hjust = 0.55)) + theme(axis.title.y = element_text(hjust = 0.5, vjust = 2.5))
+
+vg_swallow_site_chart %>% ggplot(aes(x = site, y = total_time_out_nest)) + geom_col(fill = c("#ec9006", "#1e2f97", "#797ef6")) + labs(x = "Nest Sites", y = "Time (Seconds)", title = "Total Time Out of Nest by Site") +
+  theme(plot.title.position = 'plot', 
+      plot.title = element_text(hjust = 0.55)) + theme(axis.title.y = element_text(hjust = 0.5, vjust = 2.5))
+
+
+```
+
+```{r}
+# bar graph that shows the total time in/out for each site
+
+library(ggplot2)
+library(reshape2)
+
+
+# Convert data to long format
+data_long <- melt(vg_swallow_site_chart, id.vars = 'site', variable.name = 'time_type', value.name = 'time')
+
+# Create the bar plot
+#ggplot(data_long, aes(x = site, y = time, fill = time_type)) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  labs(x = 'Nest Sites', y = 'Time (seconds)', title = 'Time In and Out of Nest by Site') +
+  scale_fill_manual(values = c('time_out_nest' = 'blue', 'time_in_nest' = 'orange')) +
+  theme_minimal() +
+  theme(plot.title = element_text(family = 'Helvetica', 
+                              color = 'black', 
+                              size = 14, 
+                              hjust = 0.5))
+```
+
+```{r}
+# make a data frame that shows the total time in/out of the nest at low/high tide
+
+vg_swallow_tide_chart = aggregate(cbind(total_time_out_nest, total_time_in_nest) ~ tide, vg_swallow, sum)
+
+View(vg_swallow_tide_chart)
+
+```
+
+```{r}
+# code for both plots just by themselves
+
+library(tidyverse)
+library(ggplot2)
+
+vg_swallow_tide_chart %>% ggplot(aes(x = tide, y = total_time_in_nest)) + geom_col(fill = c("#FFBF00", "#808836")) + labs(x = "Tide", y = "Time (Seconds)", title = "Total Time In Nest at High and Low Tide") +
+  theme(plot.title.position = 'plot', 
+      plot.title = element_text(hjust = 0.55)) + theme(axis.title.y = element_text(hjust = 0.5, vjust = 2.5))
+
+vg_swallow_tide_chart %>% ggplot(aes(x = tide, y = total_time_out_nest)) + geom_col(fill = c("#FFBF00", "#808836")) + labs(x = "Tide", y = "Time (Seconds)", title = "Total Time Out of Nest at High and Low Tide") +
+  theme(plot.title.position = 'plot', 
+      plot.title = element_text(hjust = 0.55)) + theme(axis.title.y = element_text(hjust = 0.5, vjust = 2.5))
+
+```
