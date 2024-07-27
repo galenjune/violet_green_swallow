@@ -12,16 +12,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 # install our packages
 
-install.packages("tidyverse")
-install.packages("vegan")
-install.packages("ggplot2")
-install.packages("ggpubr")
-install.packages("reshape2")
-install.packages("dplyr")
-install.packages("tidyr")
-install.packages("stats")
-install.packages("devtools")
-devtools::install_github("ebbertd/chisq.posthoc.test")
+#install.packages("tidyverse")
+#install.packages("vegan")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
+#install.packages("reshape2")
+#install.packages("dplyr")
+#install.packages("tidyr")
+#install.packages("stats")
+#install.packages("devtools")
+#devtools::install_github("ebbertd/chisq.posthoc.test")
 
 ```
 
@@ -44,7 +44,7 @@ library(chisq.posthoc.test) # for checking what made our stats tests significant
 # set/see our working directory
 
 ```{r}
-setwd("~/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files")
+setwd("/Users/cmantegna/Documents/violet_green_swallow/data")
 
 getwd()
 ```
@@ -59,7 +59,7 @@ set.seed(123)
 
 ```{r}
 # open the data as a CSV
-vg_swallow <- read.csv("/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/Data Frame/violet_green_swallow_data_final.csv", header = TRUE)
+vg_swallow <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/violet_green_swallow_data_final.csv", header = TRUE)
 ```
 
 ```{r}
@@ -91,7 +91,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out for all our sites
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site.csv", row.names = TRUE)
 
 #Removes the column "site" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(site) )
@@ -109,7 +109,7 @@ print(chi_squared_result)
 vg_swallow_site_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
 
-write.csv(vg_swallow_site_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_site_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/site/vg_swallow_aggregate_by_site_posthoc.csv", row.names = TRUE)
 
 ```
 
@@ -123,7 +123,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out for all our time quadrants
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_time_quadrant.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_time_quadrant.csv", row.names = TRUE)
 
 #Removes the column "time_quadrant" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(time_quadrant) )
@@ -140,7 +140,7 @@ print(chi_squared_result)
 #Post-hoc test to find out what is significantly different between the combinations
 vg_swallow_time_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
-write.csv(vg_swallow_time_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_timequadrant_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_time_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/time_quadrant/vg_swallow_aggregate_by_timequadrant_posthoc.csv", row.names = TRUE)
 ```
 
 ##################################################################
@@ -153,7 +153,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out in different temperatures
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f.csv", row.names = TRUE)
 
 #Removes the column "site" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(temperature_f) )
@@ -170,7 +170,7 @@ print(chi_squared_result)
 #Post-hoc test to find out what is significantly different between the combinations
 vg_swallow_temp_posthoc = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
-write.csv(vg_swallow_temp_posthoc,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_temp_posthoc,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/temperature/vg_swallow_aggregate_by_temperature_f_posthoc.csv", row.names = TRUE)
 ```
 
 ##################################################################
@@ -183,7 +183,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out for all our different types of cloud cover
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover.csv", row.names = TRUE)
 
 #Removes the column "site" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(cloud_cover) )
@@ -200,7 +200,7 @@ print(chi_squared_result)
 #Post-hoc test to find out what is significantly different between the combinations
 vg_swallow_cloud_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
-write.csv(vg_swallow_cloud_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_cloud_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/cloud_cover/vg_swallow_aggregate_by_cloud_cover_posthoc.csv", row.names = TRUE)
 ```
 
 ##################################################################
@@ -213,7 +213,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out in different wind speeds
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed.csv", row.names = TRUE)
 
 #Removes the column "site" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(wind_speed) )
@@ -230,7 +230,7 @@ print(chi_squared_result)
 #Post-hoc test to find out what is significantly different between the combinations
 vg_swallow_wind_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
-write.csv(vg_swallow_wind_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_wind_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/wind_speed/vg_swallow_aggregate_by_wind_speed_posthoc.csv", row.names = TRUE)
 ```
 
 ##################################################################
@@ -243,7 +243,7 @@ vg_swallow_chi = aggregate(cbind(total_time_out_nest, total_time_in_nest
 
 # making a .csv file that shows the results of us comparing total time in/out in different wind speeds
 
-write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide.csv", row.names = TRUE)
+#write.csv(vg_swallow_chi,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide.csv", row.names = TRUE)
 
 #Removes the column "site" but treats each row as it's own entity
 df = subset(vg_swallow_chi, select = -c(tide) )
@@ -260,7 +260,7 @@ print(chi_squared_result)
 #Post-hoc test to find out what is significantly different between the combinations
 vg_swallow_tide_results = chisq.posthoc.test(vg_swallow_chi, method = "bonferroni")
 
-write.csv(vg_swallow_tide_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide_posthoc.csv", row.names = TRUE)
+#write.csv(vg_swallow_tide_results,"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/vg_swallow_chi_results/tide/vg_swallow_aggregate_by_tide_posthoc.csv", row.names = TRUE)
 ```
 
 ##################################################################
