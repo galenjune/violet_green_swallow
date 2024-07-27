@@ -44,7 +44,8 @@ library(chisq.posthoc.test) # for checking what made our stats tests significant
 # set/see our working directory
 
 ```{r}
-setwd("/Users/cmantegna/Documents/violet_green_swallow/data")
+#OG directory is :"/Users/galenjune/Desktop/Projects/Friday Harbor Project/Data/Rstudio/R Files/"
+#setwd("/Users/cmantegna/Documents/violet_green_swallow/data")
 
 getwd()
 ```

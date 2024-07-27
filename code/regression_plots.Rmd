@@ -1,0 +1,104 @@
+---
+title: Regression plots for significant results
+---
+
+# Libraries
+```{r}
+
+# Load libraries
+library(ggplot2)
+library(dplyr)
+```
+
+# Data
+```{r}
+
+# Load data
+cloud <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_cloud_cover.csv", header = TRUE)
+cloud_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/output/vg_swallow_aggregate_by_cloud_cover_results.csv", header = TRUE)
+
+site <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_site.csv", header = TRUE)
+site_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/output/vg_swallow_aggregate_by_site_results.csv", header = TRUE)
+
+temp <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_temperature_f.csv", header = TRUE)
+temp_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/output/vg_swallow_aggregate_by_temperature_f_results.csv" , header = TRUE)
+
+tide <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_tide.csv", header = TRUE)
+tide_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/output/vg_swallow_aggregate_by_tide_results.csv" , header = TRUE)
+
+timeq <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_time_quadrant.csv", header = TRUE)
+timeq_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_time_quadrant_results.csv", header = TRUE)
+
+wind <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_wind_speed.csv", header = TRUE)
+wind_result <- read.csv("/Users/cmantegna/Documents/violet_green_swallow/data/vg_swallow_aggregate_by_wind_speed_results.csv", header = TRUE)
+
+```
+
+# Numeric conversions
+```{r}
+# Convert to numeric if necessary
+site$site <- as.numeric(as.character(site$site))
+temp$temp <- as.numeric(as.character(temp$temp))
+tide$tide <- as.numeric(as.character(tide$tide))
+timeq$timeq <- as.numeric(as.character(timeq$timeq))
+wind$wind <- as.numeric(as.character(wind$wind))
+
+
+```
+
+# Cloud
+```{r}
+
+library(ggplot2)
+
+cloud$cloud <- as.numeric(as.character(cloud$cloud))
+
+# Plot for Total Time Out of Nest vs. Cloud Cover
+ggplot(cloud, aes(x=cloud, y=total_time_out_nest)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color='red') +
+  ggtitle('Total Time Out of Nest vs. Cloud Cover') +
+  annotate("text", x=min(cloud$cloud), y=max(cloud$total_time_out_nest), 
+           label=paste("Residuals:", cloud_result$total_time_out_nest[4], 
+                       "\np-value:", cloud_result$Value[4]), 
+           hjust=0, vjust=1)
+
+# Plot for Total Time In Nest vs. Cloud Cover
+ggplot(cloud, aes(x=cloud, y=total_time_in_nest)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color='red') +
+  ggtitle('Total Time In Nest vs. Cloud Cover') +
+  annotate("text", x=min(cloud$cloud), y=max(cloud$total_time_in_nest), 
+           label=paste("Residuals:", cloud_result$total_time_in_nest[5], 
+                       "\np-value:", cloud_result$Value[5]), 
+           hjust=0, vjust=1)
+
+```
+
+#Site
+```{r}
+
+library(ggplot2)
+
+# Plot for Total Time Out of Nest by Site
+ggplot(site, aes(x=site, y=total_time_out_nest)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color='red') +
+  ggtitle('Total Time Out of Nest by Site') +
+  annotate("text", x=min(site$site), y=max(site$total_time_out_nest), 
+           label=paste("Residuals:", site_result$total_time_out_nest[1], 
+                       "\np-value:", site_result$Value[1]), 
+           hjust=0, vjust=1)
+
+# Plot for Total Time In Nest by site
+ggplot(site, aes(x=site, y=total_time_in_nest)) +
+  geom_point() +
+  geom_smooth(method='lm', se=FALSE, color='red') +
+  ggtitle('Total Time In Nest by Site') +
+  annotate("text", x=min(site$site), y=max(site$total_time_in_nest), 
+           label=paste("Residuals:", site_result$total_time_in_nest[2], 
+                       "\np-value:", site_result$Value[2]), 
+           hjust=0, vjust=1)
+
+```
+
